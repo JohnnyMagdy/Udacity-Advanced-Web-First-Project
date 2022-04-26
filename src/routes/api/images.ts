@@ -1,6 +1,8 @@
 import express from 'express';
-import sharp from 'sharp';
 import path from 'path';
+import fs from "fs";
+
+import { Resize } from '../../utilities/Sizer';
 
 const images = express();
 const port: number = 3000;
@@ -19,45 +21,48 @@ const options = {
     }
 }
 
-images.get('/', async (req: express.Request, res: express.Response) => {
+images.get('/', (req: express.Request, res: express.Response) => {
     const imgName: string = req.query.filename + '.jpg';
-    const imgDistName: string = req.query.filename + '_thumb.jpg'
 
     const width: number = Number(req.query.width);
     const height: number = Number(req.query.height);
 
+    let dimentions = "_" + width + "x" + height;;
+
+    const imgDestName: string = req.query.filename + '_thumb' + dimentions + '.jpg'
+
     const baseUrl: string = 'http://localhost:3000';
     latestUrl = baseUrl + req.originalUrl;
 
-    if (starterUrl !== null && starterUrl === latestUrl) {
-        console.log("Ready");
-        res.sendFile(imgDistName, options, (err) => {
-            if (err) {
-                console.log(err);
-            } else {
-                console.log('Sent:', imgDistName);
-            }
-        });
+    if (imgName === undefined || width === NaN || height == NaN) { //Params Validation
+        res.send("You need to specify filename, width and height parameters to the query link");
     } else {
-        console.log("Not ready");
-        starterUrl = latestUrl;
-        if (imgName === undefined || width === NaN || height == NaN) {
-            res.send("You need to specify filename, width and height parameters to the query link");
+        if (fs.existsSync(imagesDestFolder + imgDestName)) { // If Cached by file name and size
+            console.log("We didn't resize");
+            res.sendFile(imgDestName, options, (err) => {
+                if (err) {
+                    console.log(err);
+                } else {
+                    console.log('Sent:', imgDestName);
+                }
+            });
         } else {
-            await sharp(imagesSrcFolder + imgName)
-                .resize(width, height)
-                .toFile(imagesDestFolder + imgDistName, async (err, info) => {
-                    if (err) console.log(err);
-                    console.log(info);
+            if (fs.existsSync(imagesSrcFolder + imgName)) { // Not Cached and OG Exists
+                const image = Resize(imagesSrcFolder + imgName, width, height);
 
-                    await res.sendFile(imgDistName, options, (err) => {
-                        if (err) {
-                            console.log(err);
-                        } else {
-                            console.log('Sent:', imgDistName);
-                        }
+                image.toFile(imagesDestFolder + imgDestName)
+                    .then(() => {
+                        res.sendFile(imgDestName, options, (err) => {
+                            if (err) {
+                                console.log(err);
+                            } else {
+                                console.log('Sent:', imgDestName);
+                            }
+                        });
                     });
-                });
+            } else { //Dose Not Exist
+                res.send("The file dosen't exits");
+            }
         }
     }
 });
