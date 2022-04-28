@@ -7,12 +7,10 @@ describe('Image transform function should resolve or reject', () => {
     const height = 200;
 
     it('Expect transform to not throw error', async () => {
-        await Resize(fileName, width, height).toBeResolved();
+        expect(Resize(fileName, width, height)).toBeTruthy();
     })
 
     it('Expect transform to not throw error', async () => {
-        await Resize(fileName, width, height).toBeRejectedWith(
-            new Error('Input file is missing')
-        );
+        expect(Resize(fileName, width, height)).toBeFalsy();
     })
 })

@@ -1,10 +1,10 @@
 import sharp from "sharp";
 
-export async function Resize(imgPath: string, width: number, height: number): Promise<sharp.Sharp> {
+export function Resize(imgPath: string, width: number, height: number): sharp.Sharp {
     
     console.log("Image Resized");
 
-    return await sharp(imgPath).resize(width, height);
+    return sharp(imgPath).resize(width, height);
 }
 
 // interface size {
