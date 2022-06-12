@@ -12,6 +12,5 @@ describe('Test endpoint response', ()=>{
         const response = await request.get(`api/images?filename=${fileName}&width=${width}&height=${height}`);
 
         expect(response.status).toBe(200);
-
     });
 });
