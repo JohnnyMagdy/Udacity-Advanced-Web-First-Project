@@ -1,10 +1,9 @@
-import sharp from "sharp";
+import sharp from 'sharp';
 
 export function Resize(imgPath: string, width: number, height: number): sharp.Sharp {
-    
-    console.log("Image Resized");
+  console.log('Image Resized');
 
-    return sharp(imgPath).resize(width, height);
+  return sharp(imgPath).resize(width, height);
 }
 
 // interface size {

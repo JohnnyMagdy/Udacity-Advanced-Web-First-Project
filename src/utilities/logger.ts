@@ -1,15 +1,19 @@
 import express from 'express';
 
-const logger = (req: express.Request, res: express.Response, next: Function): void => {
-    let url = req.path;
+const logger = (
+  req: express.Request,
+  res: express.Response,
+  next: any
+): void => {
+  const url = req.path;
 
-    var start = new Date().getTime();
+  const start = new Date().getTime();
 
-    next();
+  next();
 
-    var end = new Date().getTime();
-    var time = end - start;
-    console.log(`${url} was visited. It took ${time}ms to load`);
-}
+  const end = new Date().getTime();
+  const time = end - start;
+  console.log(`${url} was visited. It took ${time}ms to load`);
+};
 
 export default logger;
