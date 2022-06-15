@@ -27,11 +27,19 @@ images.get('/', (req: express.Request, res: express.Response) => {
   if (req.query.width == undefined) {
     res.send('You need to specify a width');
     return;
+  }else{
+    if (!Number.isNaN(req.query.width)){
+      res.send('Width should be a number');
+    }
   }
 
   if (req.query.height == undefined) {
     res.send('You need to specify a height');
     return;
+  }else{
+    if (!Number.isNaN(req.query.height)){
+      res.send('Height should be a number');
+    }
   }
 
   const imgName: string = req.query.filename + '.jpg';
@@ -57,6 +65,7 @@ images.get('/', (req: express.Request, res: express.Response) => {
     //console.log(dir+" exists");
   }
 
+  // dir dosent work on /thumb but works on /../thumb when i run the app because i change the dir variable in line 61
   dir = path.join(dir, '/../thumb');
   if (!fs.existsSync(dir)) {
     fs.mkdirSync(dir);
