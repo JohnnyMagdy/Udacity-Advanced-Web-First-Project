@@ -28,7 +28,7 @@ images.get('/', (req: express.Request, res: express.Response) => {
     res.send('You need to specify a width');
     return;
   }else{
-    if (!Number.isNaN(req.query.width)){
+    if (isNaN(Number(req.query.width))){
       res.send('Width should be a number');
     }
   }
@@ -37,7 +37,7 @@ images.get('/', (req: express.Request, res: express.Response) => {
     res.send('You need to specify a height');
     return;
   }else{
-    if (!Number.isNaN(req.query.height)){
+    if (isNaN(Number(req.query.height))){
       res.send('Height should be a number');
     }
   }
