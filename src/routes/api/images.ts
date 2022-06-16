@@ -27,18 +27,22 @@ images.get('/', (req: express.Request, res: express.Response) => {
   if (req.query.width == undefined) {
     res.send('You need to specify a width');
     return;
-  }else{
-    if (isNaN(Number(req.query.width))){
+  } else {
+    if (isNaN(Number(req.query.width))) {
       res.send('Width should be a number');
+    } else {
+      if (Number(req.query.width) <= 0) res.send('Width should be positive number');
     }
   }
 
   if (req.query.height == undefined) {
     res.send('You need to specify a height');
     return;
-  }else{
-    if (isNaN(Number(req.query.height))){
+  } else {
+    if (isNaN(Number(req.query.height))) {
       res.send('Height should be a number');
+    } else {
+      if (Number(req.query.height) <= 0) res.send('Height should be positive number');
     }
   }
 
